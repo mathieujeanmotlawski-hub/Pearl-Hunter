@@ -1,125 +1,178 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE html><html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pearl Hunter</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pearl Hunter</title>  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      margin: 0;
+      padding: 30px 15px;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#0b1020;
-  color:white;
-}
-header{
-  text-align:center;
-  padding:25px 15px;
-  background:#111a33;
-}
-h1{margin:0;font-size:32px}
-main{padding:20px}
-.card{
-  max-width:550px;
-  margin:20px auto;
-  padding:25px;
-  background:#151f3d;
-  border-radius:18px;
-}
-input{
-  width:100%;
-  box-sizing:border-box;
-  padding:14px;
-  margin:8px 0 15px;
-  border:0;
-  border-radius:10px;
-  font-size:16px;
-}
-button{
-  width:100%;
-  padding:15px;
-  border:0;
-  border-radius:10px;
-  font-size:17px;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:8px;
-}
-.primary{background:white;color:#111a33}
-.result{
-  margin-top:20px;
-  padding:15px;
-  background:#202d52;
-  border-radius:12px;
-  display:none;
-}
-</style>
-</head>
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
 
-<body>
+    h1 {
+      text-align: center;
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
 
-<header>
-<h1>💎 Pearl Hunter</h1>
-<p>Ton chasseur personnel d'opportunités</p>
-</header>
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 30px;
+    }
 
-<main>
+    .search {
+      display: flex;
+      gap: 10px;
+    }
 
-<div class="card">
+    input {
+      flex: 1;
+      padding: 15px;
+      font-size: 17px;
+      border-radius: 10px;
+      border: none;
+    }
 
-<h2>🔎 Recherche</h2>
+    button {
+      padding: 15px 20px;
+      font-size: 17px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
 
-<p>Indique ce que tu veux rechercher :</p>
+    #results {
+      margin-top: 30px;
+    }
 
-<input id="recherche" type="text"
-placeholder="Ex : console, téléphone, outil...">
+    .result {
+      background: #1d1d1d;
+      padding: 18px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+    }
 
-<input id="budget" type="number"
-placeholder="Budget maximum (€)">
+    .result a {
+      color: #5eb7ff;
+      font-size: 20px;
+      text-decoration: none;
+    }
 
-<button class="primary" onclick="chercher()">
-🚀 Lancer la recherche
+    .result p {
+      color: #ccc;
+      line-height: 1.5;
+    }
+
+    .url {
+      color: #777;
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    .status {
+      text-align: center;
+      color: #aaa;
+      margin-top: 20px;
+    }
+  </style></head><body><div class="container">  <h1>🔎 Pearl Hunter</h1>  <div class="subtitle">
+    Recherche Web multi-sources
+  </div>  <div class="search">
+    <input
+      id="query"
+      type="text"
+      placeholder="Que cherches-tu ?"
+      onkeydown="if(event.key === 'Enter') searchWeb()"
+    ><button onclick="searchWeb()">
+  Rechercher
 </button>
 
-<div id="resultat" class="result"></div>
+  </div>  <div id="status" class="status"></div>  <div id="results"></div></div><script>
 
-</div>
+async function searchWeb() {
 
-</main>
+  const query = document.getElementById("query").value.trim();
+  const results = document.getElementById("results");
+  const status = document.getElementById("status");
 
-<script>
-
-function chercher(){
-
-  const recherche =
-    document.getElementById("recherche").value;
-
-  const budget =
-    document.getElementById("budget").value;
-
-  const resultat =
-    document.getElementById("resultat");
-
-  resultat.style.display="block";
-
-  if(recherche === ""){
-    resultat.innerHTML =
-      "⚠️ Indique d'abord ce que tu recherches.";
+  if (!query) {
+    status.textContent = "Écris quelque chose à rechercher.";
     return;
   }
 
-  resultat.innerHTML =
-    "🔍 Pearl Hunter analyse : <b>" +
-    recherche +
-    "</b><br><br>" +
-    "💰 Budget maximum : " +
-    (budget ? budget + " €" : "non défini") +
-    "<br><br>" +
-    "🧠 Moteur de recherche prêt.<br>" +
-    "La prochaine étape sera de connecter de vraies sources d'annonces.";
+  results.innerHTML = "";
+  status.textContent = "🔎 Recherche sur le Web...";
+
+  const api =
+    "https://search.bus-hit.me/search?q=" +
+    encodeURIComponent(query) +
+    "&format=json&language=fr";
+
+  try {
+
+    const response = await fetch(api);
+
+    if (!response.ok) {
+      throw new Error("Erreur du moteur de recherche");
+    }
+
+    const data = await response.json();
+
+    status.textContent =
+      data.results && data.results.length
+        ? data.results.length + " résultats trouvés"
+        : "Aucun résultat trouvé.";
+
+    if (!data.results || data.results.length === 0) {
+      results.innerHTML =
+        "<p>Aucun résultat. Essaie une autre recherche.</p>";
+      return;
+    }
+
+    data.results.forEach(result => {
+
+      const div = document.createElement("div");
+      div.className = "result";
+
+      const title = document.createElement("a");
+      title.href = result.url;
+      title.target = "_blank";
+      title.rel = "noopener noreferrer";
+      title.textContent = result.title || "Résultat";
+
+      const description = document.createElement("p");
+      description.textContent =
+        result.content || "Aucune description disponible.";
+
+      const url = document.createElement("div");
+      url.className = "url";
+      url.textContent = result.url || "";
+
+      div.appendChild(title);
+      div.appendChild(description);
+      div.appendChild(url);
+
+      results.appendChild(div);
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    status.textContent =
+      "⚠️ Le moteur n'a pas répondu.";
+
+    results.innerHTML =
+      "<p>Le moteur de recherche est momentanément indisponible. Nous pourrons en brancher un autre.</p>";
+  }
 }
 
-</script>
-
-</body>
+</script></body>
 </html>
