@@ -1,178 +1,329 @@
-<!DOCTYPE html><html lang="fr">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pearl Hunter</title>  <style>
+  <title>Pearl Hunter</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: white;
       margin: 0;
-      padding: 30px 15px;
+      font-family: Arial, sans-serif;
+      background: #0f1117;
+      color: white;
     }
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-    }
-
-    h1 {
+    header {
+      padding: 20px;
       text-align: center;
-      font-size: 38px;
-      margin-bottom: 10px;
+      background: #171a23;
+      border-bottom: 1px solid #292e3a;
     }
 
-    .subtitle {
-      text-align: center;
-      color: #aaa;
-      margin-bottom: 30px;
+    header h1 {
+      margin: 0;
+      font-size: 28px;
     }
 
-    .search {
+    header p {
+      margin: 7px 0 0;
+      color: #9da5b4;
+    }
+
+    nav {
       display: flex;
-      gap: 10px;
+      overflow-x: auto;
+      background: #171a23;
+      border-bottom: 1px solid #292e3a;
     }
 
-    input {
+    nav button {
       flex: 1;
-      padding: 15px;
-      font-size: 17px;
-      border-radius: 10px;
-      border: none;
-    }
-
-    button {
-      padding: 15px 20px;
-      font-size: 17px;
-      border: none;
-      border-radius: 10px;
+      min-width: 105px;
+      padding: 15px 10px;
+      border: 0;
+      background: transparent;
+      color: #aeb6c5;
+      font-weight: bold;
       cursor: pointer;
     }
 
-    #results {
-      margin-top: 30px;
+    nav button.active {
+      color: white;
+      background: #252a36;
+      border-bottom: 3px solid #6c63ff;
+    }
+
+    .page {
+      display: none;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .card {
+      background: #171a23;
+      border: 1px solid #292e3a;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      margin: 7px 0 14px;
+      border-radius: 8px;
+      border: 1px solid #343b49;
+      background: #0f1117;
+      color: white;
+      font-size: 16px;
+    }
+
+    label {
+      color: #aeb6c5;
+      font-size: 14px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 9px;
+      background: #6c63ff;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
     }
 
     .result {
-      background: #1d1d1d;
-      padding: 18px;
-      margin-bottom: 15px;
-      border-radius: 12px;
+      margin-top: 18px;
+      padding: 15px;
+      background: #202530;
+      border-radius: 10px;
     }
 
-    .result a {
-      color: #5eb7ff;
-      font-size: 20px;
-      text-decoration: none;
+    .big {
+      font-size: 27px;
+      font-weight: bold;
+      margin: 6px 0;
     }
 
-    .result p {
-      color: #ccc;
-      line-height: 1.5;
+    .muted {
+      color: #9da5b4;
     }
 
-    .url {
-      color: #777;
-      font-size: 13px;
-      word-break: break-all;
+    .opportunity {
+      border-left: 4px solid #6c63ff;
     }
+  </style>
+</head>
 
-    .status {
-      text-align: center;
-      color: #aaa;
-      margin-top: 20px;
-    }
-  </style></head><body><div class="container">  <h1>🔎 Pearl Hunter</h1>  <div class="subtitle">
-    Recherche Web multi-sources
-  </div>  <div class="search">
-    <input
-      id="query"
-      type="text"
-      placeholder="Que cherches-tu ?"
-      onkeydown="if(event.key === 'Enter') searchWeb()"
-    ><button onclick="searchWeb()">
-  Rechercher
-</button>
+<body>
 
-  </div>  <div id="status" class="status"></div>  <div id="results"></div></div><script>
+<header>
+  <h1>💎 Pearl Hunter</h1>
+  <p>Détecteur d'opportunités d'achat et de revente</p>
+</header>
 
-async function searchWeb() {
+<nav>
+  <button class="tab active" onclick="showPage('recherche', this)">🔎 Recherche</button>
+  <button class="tab" onclick="showPage('prix', this)">💰 Prix</button>
+  <button class="tab" onclick="showPage('marge', this)">📈 Marge</button>
+  <button class="tab" onclick="showPage('opportunites', this)">⭐ Opportunités</button>
+  <button class="tab" onclick="showPage('sources', this)">🌐 Sources</button>
+  <button class="tab" onclick="showPage('parametres', this)">⚙️ Paramètres</button>
+</nav>
 
-  const query = document.getElementById("query").value.trim();
-  const results = document.getElementById("results");
-  const status = document.getElementById("status");
+<section id="recherche" class="page active">
+  <div class="card">
+    <h2>🔎 Recherche</h2>
+    <p class="muted">Recherche les produits et opportunités à analyser.</p>
 
-  if (!query) {
-    status.textContent = "Écris quelque chose à rechercher.";
-    return;
-  }
+    <input id="search" type="text" placeholder="Ex : perceuse Bosch, iPhone, pièce auto...">
 
-  results.innerHTML = "";
-  status.textContent = "🔎 Recherche sur le Web...";
+    <button class="btn" onclick="searchProduct()">
+      Lancer la recherche
+    </button>
 
-  const api =
-    "https://search.bus-hit.me/search?q=" +
-    encodeURIComponent(query) +
-    "&format=json&language=fr";
+    <div id="searchResult"></div>
+  </div>
+</section>
 
-  try {
+<section id="prix" class="page">
+  <div class="card">
+    <h2>💰 Prix</h2>
 
-    const response = await fetch(api);
+    <label>Prix d'achat (€)</label>
+    <input id="buyPrice" type="number" step="0.01" placeholder="0.00">
 
-    if (!response.ok) {
-      throw new Error("Erreur du moteur de recherche");
-    }
+    <label>Prix de vente (€)</label>
+    <input id="sellPrice" type="number" step="0.01" placeholder="0.00">
 
-    const data = await response.json();
+    <label>Frais (€)</label>
+    <input id="fees" type="number" step="0.01" placeholder="0.00">
 
-    status.textContent =
-      data.results && data.results.length
-        ? data.results.length + " résultats trouvés"
-        : "Aucun résultat trouvé.";
+    <button class="btn" onclick="calculate()">
+      Calculer
+    </button>
 
-    if (!data.results || data.results.length === 0) {
-      results.innerHTML =
-        "<p>Aucun résultat. Essaie une autre recherche.</p>";
-      return;
-    }
+    <div id="priceResult" class="result">
+      <div class="muted">Bénéfice net</div>
+      <div class="big" id="profit">0,00 €</div>
 
-    data.results.forEach(result => {
+      <div class="muted">Marge</div>
+      <div class="big" id="margin">0,00 %</div>
+    </div>
+  </div>
+</section>
 
-      const div = document.createElement("div");
-      div.className = "result";
+<section id="marge" class="page">
+  <div class="card">
+    <h2>📈 Marge</h2>
+    <p class="muted">
+      Analyse rapidement la rentabilité d'une opération.
+    </p>
 
-      const title = document.createElement("a");
-      title.href = result.url;
-      title.target = "_blank";
-      title.rel = "noopener noreferrer";
-      title.textContent = result.title || "Résultat";
+    <label>Prix d'achat (€)</label>
+    <input id="mBuy" type="number" step="0.01" placeholder="0.00">
 
-      const description = document.createElement("p");
-      description.textContent =
-        result.content || "Aucune description disponible.";
+    <label>Prix de vente (€)</label>
+    <input id="mSell" type="number" step="0.01" placeholder="0.00">
 
-      const url = document.createElement("div");
-      url.className = "url";
-      url.textContent = result.url || "";
+    <label>Total des frais (€)</label>
+    <input id="mFees" type="number" step="0.01" placeholder="0.00">
 
-      div.appendChild(title);
-      div.appendChild(description);
-      div.appendChild(url);
+    <button class="btn" onclick="calculateMargin()">
+      Analyser la marge
+    </button>
 
-      results.appendChild(div);
-    });
+    <div id="marginResult" class="result">
+      <div class="muted">Bénéfice net</div>
+      <div class="big" id="mProfit">0,00 €</div>
 
-  } catch (error) {
+      <div class="muted">Marge sur prix de vente</div>
+      <div class="big" id="mPercent">0,00 %</div>
 
-    console.error(error);
+      <div id="mStatus" class="muted"></div>
+    </div>
+  </div>
+</section>
 
-    status.textContent =
-      "⚠️ Le moteur n'a pas répondu.";
+<section id="opportunites" class="page">
+  <div class="card">
+    <h2>⭐ Opportunités</h2>
 
-    results.innerHTML =
-      "<p>Le moteur de recherche est momentanément indisponible. Nous pourrons en brancher un autre.</p>";
+    <div class="opportunity card">
+      <h3>Les opportunités apparaîtront ici</h3>
+      <p class="muted">
+        Pearl Hunter pourra afficher les produits présentant
+        une différence intéressante entre prix d'achat et prix de vente.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="sources" class="page">
+  <div class="card">
+    <h2>🌐 Sources</h2>
+    <p class="muted">
+      Cette section servira à connecter les différentes sources
+      de prix et d'annonces.
+    </p>
+  </div>
+</section>
+
+<section id="parametres" class="page">
+  <div class="card">
+    <h2>⚙️ Paramètres</h2>
+    <p class="muted">
+      Les paramètres du moteur Pearl Hunter seront ajoutés ici.
+    </p>
+  </div>
+</section>
+
+<script>
+
+function showPage(pageId, button) {
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.remove('active');
+  });
+
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+
+  document.getElementById(pageId).classList.add('active');
+  button.classList.add('active');
+}
+
+function calculate() {
+  const buy = Number(document.getElementById('buyPrice').value) || 0;
+  const sell = Number(document.getElementById('sellPrice').value) || 0;
+  const fees = Number(document.getElementById('fees').value) || 0;
+
+  const profit = sell - buy - fees;
+  const margin = sell > 0 ? (profit / sell) * 100 : 0;
+
+  document.getElementById('profit').textContent =
+    profit.toFixed(2).replace('.', ',') + ' €';
+
+  document.getElementById('margin').textContent =
+    margin.toFixed(2).replace('.', ',') + ' %';
+}
+
+function calculateMargin() {
+  const buy = Number(document.getElementById('mBuy').value) || 0;
+  const sell = Number(document.getElementById('mSell').value) || 0;
+  const fees = Number(document.getElementById('mFees').value) || 0;
+
+  const profit = sell - buy - fees;
+  const margin = sell > 0 ? (profit / sell) * 100 : 0;
+
+  document.getElementById('mProfit').textContent =
+    profit.toFixed(2).replace('.', ',') + ' €';
+
+  document.getElementById('mPercent').textContent =
+    margin.toFixed(2).replace('.', '') + ' %';
+
+  if (profit > 0) {
+    document.getElementById('mStatus').textContent =
+      'Opération bénéficiaire.';
+  } else if (profit < 0) {
+    document.getElementById('mStatus').textContent =
+      'Opération déficitaire.';
+  } else {
+    document.getElementById('mStatus').textContent =
+      'Équilibre.';
   }
 }
 
-</script></body>
+function searchProduct() {
+  const product = document.getElementById('search').value.trim();
+
+  if (!product) {
+    document.getElementById('searchResult').innerHTML =
+      '<div class="result">Entre un produit à rechercher.</div>';
+    return;
+  }
+
+  document.getElementById('searchResult').innerHTML =
+    '<div class="result">' +
+    'Recherche préparée pour : <strong>' +
+    product +
+    '</strong><br><br>' +
+    '<span class="muted">Connexion aux sources Internet à ajouter dans la prochaine couche.</span>' +
+    '</div>';
+}
+
+</script>
+
+</body>
 </html>
