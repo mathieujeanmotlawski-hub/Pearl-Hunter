@@ -3,160 +3,115 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chasseur d'opportunités</title>
-  <style>
-    * { box-sizing: border-box; }
+  <title>Pearl Hunter</title>
 
+  <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #111;
+      background: #0b1020;
       color: white;
+      text-align: center;
     }
 
     header {
-      padding: 25px 20px;
-      text-align: center;
-      background: #1b1b1b;
-      border-bottom: 1px solid #333;
+      padding: 25px 15px;
+      background: #111a33;
     }
 
     h1 {
       margin: 0;
-      font-size: 28px;
+      font-size: 32px;
     }
 
     .subtitle {
+      color: #aeb9d8;
       margin-top: 8px;
-      color: #aaa;
     }
 
     main {
-      padding: 20px;
-      max-width: 700px;
-      margin: auto;
+      padding: 25px 15px;
     }
 
-    .search {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    input {
-      flex: 1;
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #444;
-      background: #222;
-      color: white;
-      font-size: 16px;
+    .card {
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 25px;
+      background: #151f3d;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
     button {
-      padding: 15px 18px;
-      border: 0;
-      border-radius: 10px;
-      background: #fff;
-      color: #111;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 25px;
+      margin: 8px;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .card {
-      background: #1d1d1d;
-      border: 1px solid #333;
-      border-radius: 15px;
-      padding: 18px;
-      margin-bottom: 15px;
+    .primary {
+      background: #ffffff;
+      color: #111a33;
     }
 
-    .card h2 {
-      margin-top: 0;
+    .secondary {
+      background: #26345f;
+      color: white;
     }
 
-    .price {
-      font-size: 24px;
-      font-weight: bold;
-      margin: 10px 0;
-    }
-
-    .profit {
-      color: #7cff8b;
-      font-weight: bold;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 20px;
-      background: #333;
-      color: #ccc;
-      font-size: 13px;
-      margin-top: 8px;
-    }
-
-    #results {
+    #result {
       margin-top: 20px;
+      min-height: 30px;
+      color: #dbe4ff;
     }
   </style>
 </head>
 
 <body>
 
-<header>
-  <h1>🕵️ CHASSEUR</h1>
-  <div class="subtitle">Recherche d'opportunités</div>
-</header>
+  <header>
+    <h1>💎 Pearl Hunter</h1>
+    <div class="subtitle">Ton chasseur personnel d'opportunités</div>
+  </header>
 
-<main>
-
-  <div class="search">
-    <input id="searchInput" type="text" placeholder="Que veux-tu rechercher ?">
-    <button onclick="search()">Chercher</button>
-  </div>
-
-  <div id="results">
+  <main>
 
     <div class="card">
-      <h2>Bienvenue dans Chasseur</h2>
+      <h2>🔎 Recherche d'opportunités</h2>
+
       <p>
-        Cette application servira à détecter des opportunités
-        intéressantes pour acheter, revendre et calculer
-        automatiquement une marge potentielle.
+        Trouve et analyse des opportunités intéressantes.
       </p>
-      <span class="tag">Version 1</span>
-    </div>
 
-  </div>
+      <button class="primary" onclick="lancerRecherche()">
+        🚀 Lancer la recherche
+      </button>
 
-</main>
+      <button class="secondary" onclick="afficherMessage()">
+        📊 Mon tableau de bord
+      </button>
 
-<script>
-function search() {
-  const query = document.getElementById("searchInput").value.trim();
-  const results = document.getElementById("results");
-
-  if (!query) {
-    results.innerHTML = `
-      <div class="card">
-        <h2>⚠️ Recherche vide</h2>
-        <p>Entre un produit à rechercher.</p>
+      <div id="result">
+        Prêt à chasser...
       </div>
-    `;
-    return;
-  }
-
-  results.innerHTML = `
-    <div class="card">
-      <h2>🔎 Recherche : ${query}</h2>
-      <p>Le moteur de recherche de Chasseur sera connecté ici.</p>
-      <p class="profit">Analyse des opportunités : bientôt disponible</p>
-      <span class="tag">Recherche enregistrée</span>
     </div>
-  `;
-}
-</script>
+
+  </main>
+
+  <script>
+    function lancerRecherche() {
+      document.getElementById("result").innerHTML =
+        "🔍 Recherche en cours...<br><br>Le moteur Pearl Hunter va bientôt analyser les opportunités.";
+    }
+
+    function afficherMessage() {
+      document.getElementById("result").innerHTML =
+        "📊 Tableau de bord : bientôt disponible.";
+    }
+  </script>
 
 </body>
 </html>
