@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chasseur d'opportunités</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+    }
+
+    header {
+      padding: 25px 20px;
+      text-align: center;
+      background: #1b1b1b;
+      border-bottom: 1px solid #333;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      color: #aaa;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .search {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      flex: 1;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #222;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 15px 18px;
+      border: 0;
+      border-radius: 10px;
+      background: #fff;
+      color: #111;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .card {
+      background: #1d1d1d;
+      border: 1px solid #333;
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 15px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+    }
+
+    .price {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .profit {
+      color: #7cff8b;
+      font-weight: bold;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      background: #333;
+      color: #ccc;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    #results {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🕵️ CHASSEUR</h1>
+  <div class="subtitle">Recherche d'opportunités</div>
+</header>
+
+<main>
+
+  <div class="search">
+    <input id="searchInput" type="text" placeholder="Que veux-tu rechercher ?">
+    <button onclick="search()">Chercher</button>
+  </div>
+
+  <div id="results">
+
+    <div class="card">
+      <h2>Bienvenue dans Chasseur</h2>
+      <p>
+        Cette application servira à détecter des opportunités
+        intéressantes pour acheter, revendre et calculer
+        automatiquement une marge potentielle.
+      </p>
+      <span class="tag">Version 1</span>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+function search() {
+  const query = document.getElementById("searchInput").value.trim();
+  const results = document.getElementById("results");
+
+  if (!query) {
+    results.innerHTML = `
+      <div class="card">
+        <h2>⚠️ Recherche vide</h2>
+        <p>Entre un produit à rechercher.</p>
+      </div>
+    `;
+    return;
+  }
+
+  results.innerHTML = `
+    <div class="card">
+      <h2>🔎 Recherche : ${query}</h2>
+      <p>Le moteur de recherche de Chasseur sera connecté ici.</p>
+      <p class="profit">Analyse des opportunités : bientôt disponible</p>
+      <span class="tag">Recherche enregistrée</span>
+    </div>
+  `;
+}
+</script>
+
+</body>
+</html>
