@@ -1,117 +1,125 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pearl Hunter</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pearl Hunter</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b1020;
-      color: white;
-      text-align: center;
-    }
-
-    header {
-      padding: 25px 15px;
-      background: #111a33;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 32px;
-    }
-
-    .subtitle {
-      color: #aeb9d8;
-      margin-top: 8px;
-    }
-
-    main {
-      padding: 25px 15px;
-    }
-
-    .card {
-      max-width: 500px;
-      margin: 20px auto;
-      padding: 25px;
-      background: #151f3d;
-      border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    button {
-      border: none;
-      border-radius: 12px;
-      padding: 14px 25px;
-      margin: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .primary {
-      background: #ffffff;
-      color: #111a33;
-    }
-
-    .secondary {
-      background: #26345f;
-      color: white;
-    }
-
-    #result {
-      margin-top: 20px;
-      min-height: 30px;
-      color: #dbe4ff;
-    }
-  </style>
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0b1020;
+  color:white;
+}
+header{
+  text-align:center;
+  padding:25px 15px;
+  background:#111a33;
+}
+h1{margin:0;font-size:32px}
+main{padding:20px}
+.card{
+  max-width:550px;
+  margin:20px auto;
+  padding:25px;
+  background:#151f3d;
+  border-radius:18px;
+}
+input{
+  width:100%;
+  box-sizing:border-box;
+  padding:14px;
+  margin:8px 0 15px;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
+}
+button{
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:10px;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:8px;
+}
+.primary{background:white;color:#111a33}
+.result{
+  margin-top:20px;
+  padding:15px;
+  background:#202d52;
+  border-radius:12px;
+  display:none;
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>💎 Pearl Hunter</h1>
-    <div class="subtitle">Ton chasseur personnel d'opportunités</div>
-  </header>
+<header>
+<h1>💎 Pearl Hunter</h1>
+<p>Ton chasseur personnel d'opportunités</p>
+</header>
 
-  <main>
+<main>
 
-    <div class="card">
-      <h2>🔎 Recherche d'opportunités</h2>
+<div class="card">
 
-      <p>
-        Trouve et analyse des opportunités intéressantes.
-      </p>
+<h2>🔎 Recherche</h2>
 
-      <button class="primary" onclick="lancerRecherche()">
-        🚀 Lancer la recherche
-      </button>
+<p>Indique ce que tu veux rechercher :</p>
 
-      <button class="secondary" onclick="afficherMessage()">
-        📊 Mon tableau de bord
-      </button>
+<input id="recherche" type="text"
+placeholder="Ex : console, téléphone, outil...">
 
-      <div id="result">
-        Prêt à chasser...
-      </div>
-    </div>
+<input id="budget" type="number"
+placeholder="Budget maximum (€)">
 
-  </main>
+<button class="primary" onclick="chercher()">
+🚀 Lancer la recherche
+</button>
 
-  <script>
-    function lancerRecherche() {
-      document.getElementById("result").innerHTML =
-        "🔍 Recherche en cours...<br><br>Le moteur Pearl Hunter va bientôt analyser les opportunités.";
-    }
+<div id="resultat" class="result"></div>
 
-    function afficherMessage() {
-      document.getElementById("result").innerHTML =
-        "📊 Tableau de bord : bientôt disponible.";
-    }
-  </script>
+</div>
+
+</main>
+
+<script>
+
+function chercher(){
+
+  const recherche =
+    document.getElementById("recherche").value;
+
+  const budget =
+    document.getElementById("budget").value;
+
+  const resultat =
+    document.getElementById("resultat");
+
+  resultat.style.display="block";
+
+  if(recherche === ""){
+    resultat.innerHTML =
+      "⚠️ Indique d'abord ce que tu recherches.";
+    return;
+  }
+
+  resultat.innerHTML =
+    "🔍 Pearl Hunter analyse : <b>" +
+    recherche +
+    "</b><br><br>" +
+    "💰 Budget maximum : " +
+    (budget ? budget + " €" : "non défini") +
+    "<br><br>" +
+    "🧠 Moteur de recherche prêt.<br>" +
+    "La prochaine étape sera de connecter de vraies sources d'annonces.";
+}
+
+</script>
 
 </body>
 </html>
